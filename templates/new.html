@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter un événement{% endblock %}
+
+{% block content %}
+<h1>Ajouter un événement</h1>
+
+<form method="POST">
+    <div>
+        <label for="title">Titre</label>
+        <input type="text" id="title" name="title" required>
+    </div>
+
+    <div>
+        <label for="type">Lieu</label>
+        <input type="text" id="type" name="type" required>
+    </div>
+
+    <div>
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" required>
+    </div>
+
+    <div>
+        <label for="location">Lieu</label>
+        <input type="text" id="location" name="location" required>
+    </div>
+
+    <div>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        ✅ Enregistrer
+    </button>
+
+    <a href="{{ url_for('list') }}" class="btn btn-secondary">
+        Retour
+    </a>
+</form>
+
+{% endblock %}

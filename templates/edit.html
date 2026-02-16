@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier un événement{% endblock %}
+
+{% block content %}
+<h1>Modifier l'événement</h1>
+
+<form method="POST">
+    <div>
+        <label for="title">Titre</label>
+        <input type="text" id="title" name="title" 
+               value="{{ event.title }}" required>
+    </div>
+
+    <div>
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" 
+               value="{{ event.date }}" required>
+    </div>
+
+    <div>
+        <label for="location">Lieu</label>
+        <input type="text" id="location" name="location" 
+               value="{{ event.location }}" required>
+    </div>
+
+    <div>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4">
+{{ event.description }}
+        </textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        💾 Enregistrer les modifications
+    </button>
+
+    <a href="{{ url_for('list') }}" class="btn btn-secondary">
+        Annuler
+    </a>
+</form>
+
+{% endblock %}

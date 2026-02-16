@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Liste des événements{% endblock %}
+
+{% block content %}
+<h1>Liste des événements</h1>
+
+<a href="{{ url_for('new') }}" class="btn btn-primary">
+    ➕ Ajouter un événement
+</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Date</th>
+            <th>Lieu</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr>
+            <td>{{ event.title }}</td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.location }}</td>
+            <td>{{ event.description }}</td>
+            <td>
+                <a href="{{ url_for('edit/', id=event.id) }}" class="btn btn-secondary">
+                    ✏ Modifier
+                </a>
+                <a href="{{ url_for('delete/', id=event.id) }}" 
+                   class="btn btn-danger"
+                   onclick="return confirm('Supprimer cet événement ?');">
+                    🗑 Supprimer
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
