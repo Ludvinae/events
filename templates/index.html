@@ -5,7 +5,7 @@
 {% block content %}
 <h1>Liste des événements</h1>
 
-<a href="{{ url_for('new') }}" class="btn btn-primary">
+<a href="{{ url_for('new_event') }}" class="btn btn-primary">
     ➕ Ajouter un événement
 </a>
 
@@ -24,17 +24,19 @@
         <tr>
             <td>{{ event.title }}</td>
             <td>{{ event.date }}</td>
-            <td>{{ event.lieu }}</td>
+            <td>{{ event.location }}</td>
             <td>{{ event.description }}</td>
             <td>
-                <a href="{{ url_for('edit', id=event.id) }}" class="btn btn-secondary">
+                
+                <a href="{{ url_for('edit_event', event_id=event.id) }}" class="btn btn-secondary">
                     ✏ Modifier
                 </a>
-                <a href="{{ url_for('delete', id=event.id) }}" 
+                <a href="{{ url_for('delete_event', event_id=event.id) }}" 
                    class="btn btn-danger"
                    onclick="return confirm('Supprimer cet événement ?');">
                     🗑 Supprimer
                 </a>
+                
             </td>
         </tr>
         {% endfor %}

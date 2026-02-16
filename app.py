@@ -28,13 +28,13 @@ class Events(db.Model):
 
 
 @app.route("/", methods = ["GET"])
-def list():
+def list_event():
     events = Events.query.all()
     return render_template("index.html", events=events)
 
 
 @app.route("/new", methods = ["GET", "POST"])
-def new():
+def new_event():
     if request.method == "POST":
         #action = request.form.get("action", "")
         title = request.form.get("title")
@@ -54,21 +54,20 @@ def new():
     return render_template("new.html")
 
 
-@app.route("/edit/<int:event_id>", methods = ["GET", "POST"])
-def edit(event_id):
-
-    return render_template("edit.html")
+@app.route("/edit/<int:event_id>", methods = ["GET"])
+def edit_event(event_id):
+    return render_template("edit.html/", event_id = event_id)
 
 @app.route("/delete/<int:event_id>", methods = ["GET", "POST"])
-def delete(event_id):
+def delete_event(event_id):
     event = Events.query.get(event_id)
     if not event:
-        return redirect(url_for("list"))
+        return redirect(url_for("list_event"))
     
     db.session.delete(event)
     db.session.commit()
 
-    return redirect(url_for("list"))
+    return redirect(url_for("list_event"))
 
 
 with app.app_context():
