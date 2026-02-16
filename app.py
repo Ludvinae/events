@@ -54,9 +54,26 @@ def new_event():
     return render_template("new.html")
 
 
-@app.route("/edit/<int:event_id>", methods = ["GET"])
+@app.route("/edit/<int:event_id>", methods = ["GET", "POST"])
 def edit_event(event_id):
-    return render_template("edit.html/", event_id = event_id)
+
+    event = Events.query.get(event_id)
+    if not event:
+        return redirect(url_for("list_event"))
+
+    if request.method == "POST":
+        
+        event.title = request.form["title"]
+        event.type = request.form["type"]
+
+        db.session.commit()
+
+        redirect(url_for("list_event"))
+    
+    
+    
+    
+    return render_template("edit.html", event=event)
 
 @app.route("/delete/<int:event_id>", methods = ["GET", "POST"])
 def delete_event(event_id):
