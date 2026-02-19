@@ -62,9 +62,11 @@ def edit_event(event_id):
         return redirect(url_for("list_event"))
 
     if request.method == "POST":
-        
-        event.title = request.form["title"]
-        event.type = request.form["type"]
+
+        Events.title = request.form["title"]
+        Events.type = request.form["type"]
+        Events.location = request.form["location"]
+        Events.description = request.form["description"]
 
         db.session.commit()
 
