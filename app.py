@@ -1,7 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from pydantic import BaseModel
-
 from  datetime import datetime
 
 app = Flask(__name__)
@@ -21,18 +19,11 @@ class Events(db.Model):
     type = db.Column(db.String(50), nullable = False)
     date = db.Column(db.Date, nullable = False)
     location = db.Column(db.String(128), nullable = False)
-    description = db.Column(db.Text, nullable = True)
+    description = db.Column(db.Text, nullable = False)
     date_add = db.Column(db.DateTime, default = db.func.current_timestamp())
 
     def __repr__(self):
         return f"Events('{self.title}', '{self.type}', '{self.date}', '{self.location}')"
-
-class CreateRoomRequest(BaseModel):
-    name : str = Field(min_length=1, max_length=80)
-    type : str = Field(min_length=1, max_length=80)
-    floor : int = Field(ge=0, le=10)
-    seats : int = Field(ge=1, le=500)
-    equipment : list[str]
 
 
 @app.route("/", methods = ["GET"])
@@ -57,33 +48,11 @@ def new_event():
         db.session.add(event)
         db.session.commit()
 
-        return render_template("new.html")
+        return redirect(url_for("list_event"))
 
     return render_template("new.html")
 
-
-@app.route("/edit/<int:event_id>", methods = ["GET", "POST"])
-def edit_event(event_id):
-
-    event = Events.query.get(event_id)
-    if not event:
-        return redirect(url_for("list_event"))
-
-    if request.method == "POST":
-
-        Events.title = request.form["title"]
-        Events.type = request.form["type"]
-        Events.location = request.form["location"]
-        Events.description = request.form["description"]
-
-        db.session.commit()
-
-        redirect(url_for("list_event"))
     
-    
-    
-    
-    return render_template("edit.html", event=event)
 
 @app.route("/delete/<int:event_id>", methods = ["GET", "POST"])
 def delete_event(event_id):
@@ -95,6 +64,16 @@ def delete_event(event_id):
     db.session.commit()
 
     return redirect(url_for("list_event"))
+
+@app.route("/api", methods= ["GET", "POST"])
+def next_events(proposedDate):
+    if (not proposedDate isinstance datetime)
+
+    events = Events.query.filter(Events.date > proposedDate).order_by(Events.date.asc()).limit(5).all()
+
+
+    return jsonify(events, status=200, mimetype = "application/json")
+    #return render_template("api.html", events = events)
 
 
 with app.app_context():
