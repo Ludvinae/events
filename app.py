@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from pydantic import BaseModel
+
 from  datetime import datetime
 
 app = Flask(__name__)
@@ -25,6 +27,12 @@ class Events(db.Model):
     def __repr__(self):
         return f"Events('{self.title}', '{self.type}', '{self.date}', '{self.location}')"
 
+class CreateRoomRequest(BaseModel):
+    name : str = Field(min_length=1, max_length=80)
+    type : str = Field(min_length=1, max_length=80)
+    floor : int = Field(ge=0, le=10)
+    seats : int = Field(ge=1, le=500)
+    equipment : list[str]
 
 
 @app.route("/", methods = ["GET"])
