@@ -35,11 +35,11 @@ def list_event():
 @app.route("/new", methods = ["GET", "POST"])
 def new_event():
     if request.method == "POST":
-        title = request.form.get("title")
+        title = request.form.get("title").strip()
         type = request.form.get("type")
         dateStr = request.form.get("date")
-        location = request.form.get("location")
-        description = request.form.get("description")
+        location = request.form.get("location").strip()
+        description = request.form.get("description").strip()
 
         if not title or not type or not dateStr or not location or not description:
             return render_template("new.html", error="Tous les champs sont obligatoires.")

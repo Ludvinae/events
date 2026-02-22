@@ -17,7 +17,14 @@
 
     <div>
         <label for="type">Type</label>
-        <input type="text" id="type" name="type" required>
+        <select name="type" id="type" name="type" required>
+            <option value=""></option>
+            <option value="conférence">Conférence</option>
+            <option value="team building">Team building</option>
+            <option value="sortie">Sortie</option>
+            <option value="repas d'équipe">Repas d'équipe</option>
+            <option value="autre">Autre</option>
+        </select>
     </div>
 
     <div>
@@ -32,7 +39,7 @@
 
     <div>
         <label for="description">Description</label>
-        <textarea id="description" name="description" rows="4"></textarea>
+        <textarea id="description" name="description" rows="4" required></textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">
