@@ -60,20 +60,41 @@ def delete_event(event_id):
     if not event:
         return redirect(url_for("list_event"))
     
-    db.session.delete(event)
-    db.session.commit()
+    if request.method == "POST":
+        db.session.delete(event)
+        db.session.commit()
 
     return redirect(url_for("list_event"))
 
-@app.route("/api", methods= ["GET", "POST"])
-def next_events(proposedDate):
-    if (not proposedDate isinstance datetime)
+@app.route("/api/events/upcoming/<proposed_date>", methods= ["GET"])
+def next_events(proposed_date):
+    try:
+        proposed_date = datetime.strptime(proposed_date, "%Y-%m-%d").date()
 
-    events = Events.query.filter(Events.date > proposedDate).order_by(Events.date.asc()).limit(5).all()
+    except ValueError:
+        return jsonify({
+            "status": "error",
+            "message": "Format de la date invalide."
+        }), 400
 
+    events = Events.query.filter(Events.date > proposed_date).order_by(Events.date.asc()).limit(5).all()
 
-    return jsonify(events, status=200, mimetype = "application/json")
-    #return render_template("api.html", events = events)
+    eventsList = []
+    for event in events:
+        eventsList.append({
+            "id": event.id,
+            "title": event.title,
+            "type": event.type,
+            "date": event.date.isoformat(),
+            "location": event.location,
+            "description": event.description
+        })
+
+    return jsonify({
+        "status": "success",
+        "count": len(eventsList),
+        "data": eventsList
+    }), 200
 
 
 with app.app_context():
