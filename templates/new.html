@@ -4,7 +4,11 @@
 
 {% block content %}
 <h1>Ajouter un événement</h1>
-
+<div>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+</div>
 <form method="POST">
     <div>
         <label for="title">Titre</label>

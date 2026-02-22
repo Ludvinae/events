@@ -35,15 +35,16 @@ def list_event():
 @app.route("/new", methods = ["GET", "POST"])
 def new_event():
     if request.method == "POST":
-        #action = request.form.get("action", "")
         title = request.form.get("title")
         type = request.form.get("type")
         dateStr = request.form.get("date")
         location = request.form.get("location")
         description = request.form.get("description")
 
-        dateformated = datetime.strptime(dateStr, '%Y-%m-%d').date()
+        if not title or not type or not dateStr or not location or not description:
+            return render_template("new.html", error="Tous les champs sont obligatoires.")
 
+        dateformated = datetime.strptime(dateStr, '%Y-%m-%d').date()
         event= Events(title=title, type=type, date=dateformated, location=location, description=description)
         db.session.add(event)
         db.session.commit()
@@ -66,6 +67,7 @@ def delete_event(event_id):
 
     return redirect(url_for("list_event"))
 
+
 @app.route("/api/events/upcoming/<proposed_date>", methods= ["GET"])
 def next_events(proposed_date):
     try:
@@ -77,7 +79,7 @@ def next_events(proposed_date):
             "message": "Format de la date invalide."
         }), 400
 
-    events = Events.query.filter(Events.date > proposed_date).order_by(Events.date.asc()).limit(5).all()
+    events = Events.query.filter(Events.date >= proposed_date).order_by(Events.date.asc()).limit(5).all()
 
     eventsList = []
     for event in events:
