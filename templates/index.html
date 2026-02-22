@@ -17,6 +17,7 @@
             <th>Date</th>
             <th>Lieu</th>
             <th>Description</th>
+            <th>Posté le</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -28,6 +29,7 @@
             <td>{{ event.date }}</td>
             <td>{{ event.location }}</td>
             <td>{{ event.description }}</td>
+            <td>{{ event.date_add }}</td>
             <td>
                 <form action="{{ url_for('delete_event', event_id=event.id) }}" 
                         method="POST" 
