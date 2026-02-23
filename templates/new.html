@@ -5,9 +5,7 @@
 {% block content %}
 <h1>Ajouter un événement</h1>
 <div>
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% endif %}
+    {% include "flash.html" %}
 </div>
 <form method="POST">
     <div>

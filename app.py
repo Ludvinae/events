@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from  datetime import datetime
 
@@ -7,7 +7,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-
+app.secret_key = "supersecretkey"
 
 
 
@@ -41,16 +41,33 @@ def new_event():
         location = request.form.get("location").strip()
         description = request.form.get("description").strip()
 
-        if not title or not type or not dateStr or not location or not description:
-            return render_template("new.html", error="Tous les champs sont obligatoires.")
+        success = True
+        if not title:
+            flash("Veuillez remplir le titre", "error")
+            success = False
+        if not type:
+            flash("Veuillez choisir un type d'evenement", "error")
+            success = False
+        if not dateStr:
+            flash("Veuillez choisir une date pour l'evenement", "error")
+            success = False
+        if not location:
+            flash("Veuillez choisir un lieu pour l'evenement", "error")
+            success = False
+        if not description:
+            flash("Veuillez entrer une description succinte", "error")
+            success = False
 
-        dateformated = datetime.strptime(dateStr, '%Y-%m-%d').date()
-        event= Events(title=title, type=type, date=dateformated, location=location, description=description)
-        db.session.add(event)
-        db.session.commit()
+        if success:
+            dateformated = datetime.strptime(dateStr, '%Y-%m-%d').date()
+            event= Events(title=title, type=type, date=dateformated, location=location, description=description)
+            db.session.add(event)
+            db.session.commit()
 
-        return redirect(url_for("list_event"))
-
+            return redirect(url_for("list_event"))
+        
+        return redirect("/new")
+        
     return render_template("new.html")
 
     
